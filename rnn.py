@@ -31,7 +31,9 @@ def rnn_cell_forward(x_t, a_prev, params):
     # Compute the next activation
 
     a_next  = np.tanh(np.dot(Wax,x_t)+np.dot(Wya,a_prev) + ba)
-    yt_pred = None
+    yt_pred = softmax(np.dot(Wya,a_next) + by)
 
+    cache =(a_next,a_prev, x_t,params)
 
-    pass
+    return a_next,yt_pred,cache
+    

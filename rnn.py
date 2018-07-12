@@ -36,4 +36,23 @@ def rnn_cell_forward(x_t, a_prev, params):
     cache =(a_next,a_prev, x_t,params)
 
     return a_next,yt_pred,cache
-    
+
+
+
+def rnn_forward(x,params):
+    """
+        1) Create a vector of zeros to store all hidden states.
+        2) Initialize the "next" hidden state as a0 (iniital state)
+        3) Start looping over each time step, with incremental index 't'
+            a)Update the next hidden state and cache by running the rnn_cell_forward
+            b)Store the next hidden state in a(t'th position)
+            c)Store the prediction in y
+            d)Add the cache to list of caches
+        4) return a,y,caches
+
+    """
+    #Initialize caches
+    caches =[]
+
+    n_x,m,Tx = x.shape
+    n_y,n_a = paramters["Wya"].shape

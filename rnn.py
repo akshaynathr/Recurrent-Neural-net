@@ -55,4 +55,41 @@ def rnn_forward(x,params):
     caches =[]
 
     n_x,m,Tx = x.shape
-    n_y,n_a = paramters["Wya"].shape
+    n_y,n_a = params["Wya"].shape
+
+    #initialize y and a with 0
+    a= np.zeros((n_a,m,T_x))
+    y_pred = np.zeros((n_y,m,T_x))
+
+    # Initialize a_next 
+    a_next = a0
+
+    for t in range(T_x):
+        a_next,yt_pred,cache = rnn_cell_forward(x[:,:,t],a_next,params)
+        caches.append(cache)
+        a[:,:,t] = a_next
+        y_pred[:,:,t] = yt_pred
+    
+    caches =(caches,x)
+    
+
+    return a,y_pred,caches
+
+
+
+def rnn_cell_backward(da_next,cache):
+    """ Implementation of backward pass in 
+    RNN-cell for single time step 
+
+    da_next--> Gradient of loss wrt next hidden state
+    cache  --> contains useful values
+
+    Returns:
+    gradients -- <type> python dict
+                    dx -- Gradients of input data of shape (n_x,m)
+                    da_prev -- Gradients of previous hidden state, of shape (n_a,m)
+                    dWax -- Gradients of input-to-hidden weights, of shape (n_a,n_x)
+                    dWaa -- Gradients of hidden-to-hidden weights, of shape (n_a,n_a)
+                    dba  -- Gradients of bias vector, of shape (n_a,1)
+    """
+

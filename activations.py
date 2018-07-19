@@ -19,5 +19,5 @@ class Tanh:
 
     def backward(self,val,diff_val):
         output = self.forward(val)
-        return ((1.0 - np.square(2))* diff_val)
+        return ((1.0 - np.square(output))* diff_val)
 
